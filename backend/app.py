@@ -1,5 +1,6 @@
 from flask import Flask, request, json, Response, jsonify
 import pickle
+import numpy
 
 from flask_cors import CORS, cross_origin
 import pandas as pd
@@ -14,6 +15,26 @@ max= [-2.59793,	-2.58566,	-1.77495,	1.37953,	0.070945104,	1.20653,	0.05116,	0.16
 # Fetchs the model file for prediction
 model1 = pickle.load(open('model.pkl','rb'))
 
+live_df = pd.read_excel('data/SPX_train_0.xlsx').drop(columns=['Time','Returns'])
+excel = live_df.to_json()
+excel_dict = json.loads(excel)
+#print(excel_dict.keys())
+calc_min = []
+calc_max = []
+
+for col in excel_dict.keys():
+    val = []
+    for values in excel_dict[col].keys():
+        val.append(excel_dict[col][values])
+    calc_min.append(numpy.min(val))
+    calc_max.append(numpy.max(val))
+print(calc_min)
+print(min)
+
+
+
+
+
 def normalize_input(input):
     """
     Normalizes the given input values min/max.
@@ -21,7 +42,7 @@ def normalize_input(input):
     r = []
     i=0;
     for x in input:
-        t = 0 # modify code here
+        t = (x- calc_min[i]) / (calc_max[i] - calc_min[i])
         r.append(t)
         i=i+1
     return r;
@@ -49,7 +70,8 @@ def api():
 
 @app.route('/data', methods=['GET'])
 def data():
-    live_df = pd.read_excel('data/SPX_live0.xlsx')
+    # live_df = pd.read_excel('data/SPX_live0.xlsx')
+    live_df = pd.read_excel('data/SPX_train_0.xlsx')
     print(live_df)
     return live_df.to_json()
 

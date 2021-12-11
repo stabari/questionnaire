@@ -1,7 +1,7 @@
-FROM python:3.10-slim-buster
+FROM python:3.8-slim-buster
 WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
-ENV FLASK_APP=app.py
-CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+ENV FLASK_APP=./backend/app.py
+CMD ["python", "-m" , "flask", "run", "--host=0.0.0.0"]

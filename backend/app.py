@@ -12,7 +12,7 @@ max= [-2.59793,	-2.58566,	-1.77495,	1.37953,	0.070945104,	1.20653,	0.05116,	0.16
 ]
 
 # Fetchs the model file for prediction
-model1 = pickle.load(open('model.pkl','rb'))
+model1 = pickle.load(open('./backend/model.pkl','rb'))
 
 def normalize_input(input):
     """
